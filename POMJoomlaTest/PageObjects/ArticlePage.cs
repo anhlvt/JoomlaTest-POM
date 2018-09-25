@@ -18,17 +18,18 @@ namespace POMJoomlaTest.PageObjects
         {
             this.driver = driver;
         }
-        public By newBtn = By.Id("toolbar-new");
-        public By editBtn = By.Id("toolbar-edit");
-        public By publishBtn = By.Id("toolbar-publish");
-        public By unPublishBtn = By.Id("toolbar-unpublish");
-        public By featureBtn = By.Id("toolbar-featured");
-        public By unFeatureBtn = By.Id("toolbar-unfeatured");
-        public By archiveBtn = By.Id("toolbar-archive");
-        public By checkInBtn = By.Id("toolbar-checkin");
-        public By batchBtn = By.Id("toolbar-batch");
-        public By trashBtn = By.Id("toolbar-trash");
-
+        //toolbar button
+        public By New = By.Id("toolbar-new");
+        public By Edit = By.Id("toolbar-edit");
+        public By Publish = By.Id("toolbar-publish");
+        public By Unpublish = By.Id("toolbar-unpublish");
+        public By Feature = By.Id("toolbar-featured");
+        public By Unfeature = By.Id("toolbar-unfeatured");
+        public By Archive = By.Id("toolbar-archive");
+        public By Checkin = By.Id("toolbar-checkin");
+        public By Batch = By.Id("toolbar-batch");
+        public By Trash = By.Id("toolbar-trash");
+        //information
         public By titleTxt = By.Id("jform_title");
         public By textFram = By.Id("jform_articletext_ifr");
         public By textArea = By.Id("tinymce");
@@ -36,27 +37,41 @@ namespace POMJoomlaTest.PageObjects
         public By categorysDropList = By.Id("jform_catid");
         public By accessDropList = By.Id("jform_access");
         public By languageDropList = By.Id("jform_language");
+        //save type
+        public By Save = By.CssSelector("#toolbar-apply > button");
+        public By SaveAndClose = By.CssSelector("#toolbar-save > button");
+        public By SaveAndNew = By.CssSelector("#toolbar-save-new > button");
+        public By Cancel = By.CssSelector("#toolbar-cancel > button");
 
         public void clickToolBarButton(By toolbar)
         {
             driver.FindElement(toolbar).Click();
-        }
-
-        public void modifyElementStatus(By droplistName, string statusDisplay)
+        }       
+        public void selectStatusDropList(string statusItems)
         {
-            IWebElement hiddenWebElement = driver.FindElement(droplistName);
-            string strScript = "document.getElementById('jform_state').style.display = \"" + statusDisplay + "\";";
+            IWebElement hiddenWebElement = driver.FindElement(statusDropList);
+            string strScript = "document.getElementById('jform_state').style.display = 'block';";
             ((IJavaScriptExecutor)driver).ExecuteScript(strScript, hiddenWebElement);
+            SelectElement select = new SelectElement(driver.FindElement(statusDropList));
+            select.SelectByText(statusItems);
         }
-
-        public void selectDropList(By droplistName, string statusDisplay, string items)
+        public void selectCategoryDropList(string categoryItems)
         {
-            modifyElementStatus(droplistName, statusDisplay);
-            SelectElement select = new SelectElement(driver.FindElement(droplistName));
-            select.SelectByText(items);
+            IWebElement hiddenWebElement = driver.FindElement(categorysDropList);
+            string strScript = "document.getElementById('jform_catid').style.display = 'block';";
+            ((IJavaScriptExecutor)driver).ExecuteScript(strScript, hiddenWebElement);
+            SelectElement select = new SelectElement(driver.FindElement(categorysDropList));
+            select.SelectByText(categoryItems);
         }
-
-        public void fillArticleInformation(string title, string paragraph)
+        public void selectAccessDropList(string accessItems)
+        {
+            IWebElement hiddenWebElement = driver.FindElement(statusDropList);
+            string strScript = "document.getElementById('jform_access').style.display = 'block';";
+            ((IJavaScriptExecutor)driver).ExecuteScript(strScript, hiddenWebElement);
+            SelectElement select = new SelectElement(driver.FindElement(statusDropList));
+            select.SelectByText(accessItems);
+        }        
+        public void fillArticleInformation(string title, string statusItems, string categoryItems, string paragraph)
         {
             if (title != null)
             {
@@ -64,6 +79,16 @@ namespace POMJoomlaTest.PageObjects
                 driver.FindElement(titleTxt).SendKeys(title);
             }
 
+            if (statusItems != null)
+            {
+                selectStatusDropList(statusItems);
+            }
+
+            if (categoryItems != null)
+            {
+                selectCategoryDropList(categoryItems);
+            }
+            
             if (paragraph != null)
             {
                 driver.SwitchTo().Frame(driver.FindElement(textFram));
@@ -71,6 +96,10 @@ namespace POMJoomlaTest.PageObjects
                 driver.FindElement(textArea).SendKeys(paragraph);
                 driver.SwitchTo().DefaultContent();
             }
+        }
+        public void selectSaveType(By saveType)
+        {
+            driver.FindElement(saveType).Click();
         }
     }
 }
