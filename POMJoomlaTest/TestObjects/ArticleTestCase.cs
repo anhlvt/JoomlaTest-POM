@@ -23,7 +23,7 @@ namespace POMJoomlaTest
             homePage.goToArticlePage();
             articlePage.addNewArticle("Article Test", null,"Sample Data-Articles",null, "this is article");
             articlePage.verifySuccessMessage(articlePage.successMessage, "Article saved.");
-
+            articlePage.checkArticleExist("Article Test", "Sample Data-Articles");
         }
 
         [TestMethod]
