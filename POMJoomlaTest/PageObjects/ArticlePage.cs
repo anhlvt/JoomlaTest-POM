@@ -11,96 +11,123 @@ using OpenQA.Selenium.Support.UI;
 
 namespace POMJoomlaTest.PageObjects
 {
-    public class ArticlePage
+    public class ArticlePage : CommonPage
     {
         private IWebDriver driver;
-        public ArticlePage(IWebDriver driver)
+        
+        public ArticlePage(IWebDriver driver) : base(driver)
         {
             this.driver = driver;
             PageFactory.InitElements(driver, this);
         }
-        //toolbar button 
-        [FindsBy(How = How.Id, Using = "toolbar-new")]
-        private IWebElement btnNew;
-        [FindsBy(How = How.Id, Using = "toolbar-edit")]
-        private IWebElement btnEdit;
-        [FindsBy(How = How.Id, Using = "toolbar-publish")]
-        private IWebElement btnPublish;
-        [FindsBy(How = How.Id, Using = "toolbar-unpublish")]
-        private IWebElement btnUnpublish;
-        [FindsBy(How = How.Id, Using = "toolbar-archive")]
-        private IWebElement btnArchive;        
-        //information
-        public By titleTxt = By.Id("jform_title");
-        public By textFram = By.Id("jform_articletext_ifr");
-        public By textArea = By.Id("tinymce");
-        public By statusDropList = By.Id("jform_state");
-        public By categorysDropList = By.Id("jform_catid");
-        public By accessDropList = By.Id("jform_access");
-        public By languageDropList = By.Id("jform_language");
-        //save type
-        public By Save = By.CssSelector("#toolbar-apply > button");
-        public By SaveAndClose = By.CssSelector("#toolbar-save > button");
-        public By SaveAndNew = By.CssSelector("#toolbar-save-new > button");
-        public By Cancel = By.CssSelector("#toolbar-cancel > button");
 
-        public void clickToolBarButton(By toolbar)
+        //toolbar button
+        [FindsBy(How = How.Id, Using = "toolbar-new")]
+        public IWebElement btnNew;
+        [FindsBy(How = How.Id, Using = "toolbar-edit")]
+        public IWebElement btnEdit;
+        [FindsBy(How = How.Id, Using = "toolbar-publish")]
+        public IWebElement btnPublish;
+        [FindsBy(How = How.Id, Using = "toolbar-unpublish")]
+        public IWebElement btnUnpublish;
+        [FindsBy(How = How.Id, Using = "toolbar-archive")]
+        public IWebElement btnArchive;
+        //save type
+        [FindsBy(How = How.CssSelector, Using = "#toolbar-apply > button")]
+        public IWebElement btnSave ;
+        [FindsBy(How = How.CssSelector, Using = "#toolbar-save > button")]
+        public IWebElement btnSaveAndClose;
+        [FindsBy(How = How.CssSelector, Using = "#toolbar-save-new > button")]
+        public IWebElement btnSaveAndNew;
+        [FindsBy(How = How.CssSelector, Using = "#toolbar-cancel > button")]
+        public IWebElement btnCancel;
+        //        
+        [FindsBy(How = How.Id, Using = "jform_title")]
+        public IWebElement txtTitle;
+        [FindsBy(How = How.Id, Using = "jform_state")]
+        public IWebElement cboStatus;
+        [FindsBy(How = How.Id, Using = "jform_catid")]
+        public IWebElement cboCategory;
+        [FindsBy(How = How.Id, Using = "jform_access")]
+        public IWebElement cboAccess;
+        [FindsBy(How = How.Id, Using = "jform_articletext_ifr")]
+        public IWebElement frameTextArea;
+        [FindsBy(How = How.Id, Using = "tinymce")]
+        public IWebElement txtTextArea;
+
+        [FindsBy(How = How.XPath, Using = "//div[@class='alert alert-success']/div[@class='alert-message']")]
+        public IWebElement successMessage;        
+        [FindsBy(How = How.CssSelector, Using = ".btn.js-stools-btn-filter")]
+        public IWebElement btnSearchTool;
+
+
+        //filter
+        [FindsBy(How = How.Id, Using = "filter_published")]
+        public IWebElement cboStatusFilter;        
+        [FindsBy(How = How.Id, Using = "filter_access")]
+        public IWebElement cboAccessFilter;
+        [FindsBy(How = How.Id, Using = "filter_author_id")]
+        public IWebElement cboAthorFilter;
+        IWebElement title;
+        [FindsBy(How = How.Id, Using = "//a[normalize-space()=\"" + title + "\"]")]
+        private IWebElement iconPublish;        
+
+        public void addNewArticle(string title, string statusItems, string categoryItems, string accessItems, string paragraph)
         {
-            driver.FindElement(toolbar).Click();
-        }       
-        public void selectStatusDropList(string statusItems)
-        {
-            IWebElement hiddenWebElement = driver.FindElement(statusDropList);
-            string strScript = "document.getElementById('jform_state').style.display = 'block';";
-            ((IJavaScriptExecutor)driver).ExecuteScript(strScript, hiddenWebElement);
-            SelectElement select = new SelectElement(driver.FindElement(statusDropList));
-            select.SelectByText(statusItems);
+            clickControl(btnNew);
+            fillArticleInformation(title, statusItems, categoryItems, accessItems, paragraph);
+            clickControl(btnSaveAndClose);
         }
-        public void selectCategoryDropList(string categoryItems)
-        {
-            IWebElement hiddenWebElement = driver.FindElement(categorysDropList);
-            string strScript = "document.getElementById('jform_catid').style.display = 'block';";
-            ((IJavaScriptExecutor)driver).ExecuteScript(strScript, hiddenWebElement);
-            SelectElement select = new SelectElement(driver.FindElement(categorysDropList));
-            select.SelectByText(categoryItems);
+        public void editArticle(string title, string statusItems, string categoryItems, string accessItems, string paragraph)
+        {            
+            clickControl(btnEdit);
+            fillArticleInformation(title, statusItems, categoryItems, accessItems, paragraph);
+            clickControl(btnSaveAndClose);
         }
-        public void selectAccessDropList(string accessItems)
-        {
-            IWebElement hiddenWebElement = driver.FindElement(statusDropList);
-            string strScript = "document.getElementById('jform_access').style.display = 'block';";
-            ((IJavaScriptExecutor)driver).ExecuteScript(strScript, hiddenWebElement);
-            SelectElement select = new SelectElement(driver.FindElement(statusDropList));
-            select.SelectByText(accessItems);
-        }        
-        public void fillArticleInformation(string title, string statusItems, string categoryItems, string paragraph)
+        public void fillArticleInformation(string title, string statusItems,string categoryItems, string accessItems,string paragraph)
         {
             if (title != null)
             {
-                driver.FindElement(titleTxt).Clear();
-                driver.FindElement(titleTxt).SendKeys(title);
+                enterTextBox(txtTitle, title);
             }
-
             if (statusItems != null)
             {
-                selectStatusDropList(statusItems);
+                selectDropDown(cboStatus, statusItems);
             }
-
-            if (categoryItems != null)
+            if (categoryItems!= null)
             {
-                selectCategoryDropList(categoryItems);
+                selectDropDown(cboCategory, categoryItems);
             }
-            
+            if (accessItems != null)
+            {
+                selectDropDown(cboAccess, accessItems);
+            }
             if (paragraph != null)
             {
-                driver.SwitchTo().Frame(driver.FindElement(textFram));
-                driver.FindElement(textArea).Clear();
-                driver.FindElement(textArea).SendKeys(paragraph);
-                driver.SwitchTo().DefaultContent();
-            }
+                switchToFrame(frameTextArea);
+                enterTextBox(txtTextArea, paragraph);
+                switchToDefault();
+            }            
         }
-        public void selectSaveType(By saveType)
+        public void checkOnRecentArticle(string title)
         {
-            driver.FindElement(saveType).Click();
+            driver.FindElement(By.XPath("//a[normalize-space()=\"" + title + "\"]/ancestor::tr//input[@type='checkbox']")).Click();
+        }       
+        public void checkArticleExist(string title,string categoryItem)
+        {
+            try
+            {
+                Assert.IsTrue(driver.FindElement(By.XPath("//a[normalize-space()=\"" + title + "\"]")).Displayed);
+                Assert.AreEqual(driver.FindElement(By.XPath("//a[normalize-space()=\"" + title + "\"]/parent::div//div[@class='small']")).Text, "Category: " + categoryItem);
+            //    Assert.IsTrue(driver.FindElement(By.XPath("//a[normalize-space()=\"" + title + "\"]/ancestor::tr//span[@class='icon-publish']")).Displayed);
+            //    Assert.IsTrue(driver.FindElement(By.XPath("//a[normalize-space()=\"" + title + "\"]/ancestor::tr//span[@class='icon-unpublish']")).Displayed);
+            //    Assert.IsTrue(driver.FindElement(By.XPath("//a[normalize-space()=\"" + title + "\"]/ancestor::tr//span[@class='icon-archive']")).Displayed);
+            //    Assert.IsTrue(driver.FindElement(By.XPath("//a[normalize-space()=\"" + title + "\"]/ancestor::tr//span[@class='icon-trash']")).Displayed);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }

@@ -10,21 +10,24 @@ using OpenQA.Selenium.Support.PageObjects;
 
 namespace POMJoomlaTest.PageObjects
 {
-    public class HomePage
+   public class HomePage : CommonPage
     {
-        public IWebDriver driver;
-        public HomePage(IWebDriver driver)
+        private IWebDriver driver;
+        public HomePage(IWebDriver driver) : base(driver)
         {
-            this.driver = driver;            
+            this.driver = driver;
+            PageFactory.InitElements(driver, this);
         }
-                
-        By contentBar = By.LinkText("Content");
-        By articlesBar = By.LinkText("Articles");        
+
+        [FindsBy(How = How.LinkText, Using = "Content")]
+        public IWebElement barContent;
+        [FindsBy(How = How.LinkText, Using = "Articles")]
+        public IWebElement barArticles;                
 
         public void goToArticlePage()
         {
-            driver.FindElement(contentBar).Click();
-            driver.FindElement(articlesBar).Click();            
+            clickControl(barContent);
+            clickControl(barArticles);
         }
 
     }
