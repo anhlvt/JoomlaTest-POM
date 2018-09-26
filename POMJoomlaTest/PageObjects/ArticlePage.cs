@@ -67,10 +67,7 @@ namespace POMJoomlaTest.PageObjects
         [FindsBy(How = How.Id, Using = "filter_access")]
         public IWebElement cboAccessFilter;
         [FindsBy(How = How.Id, Using = "filter_author_id")]
-        public IWebElement cboAthorFilter;
-        IWebElement title;
-        [FindsBy(How = How.Id, Using = "//a[normalize-space()=\"" + title + "\"]")]
-        private IWebElement iconPublish;        
+        public IWebElement cboAthorFilter;              
 
         public void addNewArticle(string title, string statusItems, string categoryItems, string accessItems, string paragraph)
         {
