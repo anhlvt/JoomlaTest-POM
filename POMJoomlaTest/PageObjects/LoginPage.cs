@@ -11,30 +11,29 @@ using OpenQA.Selenium.Support.UI;
 
 namespace POMJoomlaTest.PageObjects
 {
-    class LoginPage
+    public class LoginPage:TestBase
     {
         private IWebDriver driver;
-        private WebDriverWait wait;
 
         public LoginPage(IWebDriver driver)
-        {
-            this.driver = driver;            
+            : base(driver)
+        {          
+            this.driver = driver;
+            PageFactory.InitElements(driver, this);
         }
 
-        By usernameTxt = By.Id("mod-login-username");
-        By passwordTxt = By.Id("mod-login-password");
-        By loginBtn = By.ClassName("login-button");
-       
-        public void goToPage()
-        {
-            driver.Navigate().GoToUrl("http://192.168.190.247/joomlatest/administrator/index.php");
-        }
+        [FindsBy(How = How.Id, Using = "mod-login-username")]
+        private IWebElement txtUserName;
+        [FindsBy(How = How.CssSelector, Using = "mod-login-password")]
+        private IWebElement txtPassword;
+        [FindsBy(How = How.CssSelector, Using = ".btn btn-primary btn-block btn-large login-button")]
+        private IWebElement btnLogin; 
 
         public void login(string username, string password)
         {
-            driver.FindElement(usernameTxt).SendKeys(username);
-            driver.FindElement(passwordTxt).SendKeys(username);
-            driver.FindElement(loginBtn).Click();            
+            txtUserName.SendKeys(username);
+            txtPassword.SendKeys(password);
+            btnLogin.Click();
         }
     }
 }

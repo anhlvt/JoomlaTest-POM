@@ -11,24 +11,25 @@ using OpenQA.Selenium.Support.UI;
 
 namespace POMJoomlaTest.PageObjects
 {
-    class ArticlePage
+    public class ArticlePage
     {
         private IWebDriver driver;
         public ArticlePage(IWebDriver driver)
         {
             this.driver = driver;
+            PageFactory.InitElements(driver, this);
         }
-        //toolbar button
-        public By New = By.Id("toolbar-new");
-        public By Edit = By.Id("toolbar-edit");
-        public By Publish = By.Id("toolbar-publish");
-        public By Unpublish = By.Id("toolbar-unpublish");
-        public By Feature = By.Id("toolbar-featured");
-        public By Unfeature = By.Id("toolbar-unfeatured");
-        public By Archive = By.Id("toolbar-archive");
-        public By Checkin = By.Id("toolbar-checkin");
-        public By Batch = By.Id("toolbar-batch");
-        public By Trash = By.Id("toolbar-trash");
+        //toolbar button 
+        [FindsBy(How = How.Id, Using = "toolbar-new")]
+        private IWebElement btnNew;
+        [FindsBy(How = How.Id, Using = "toolbar-edit")]
+        private IWebElement btnEdit;
+        [FindsBy(How = How.Id, Using = "toolbar-publish")]
+        private IWebElement btnPublish;
+        [FindsBy(How = How.Id, Using = "toolbar-unpublish")]
+        private IWebElement btnUnpublish;
+        [FindsBy(How = How.Id, Using = "toolbar-archive")]
+        private IWebElement btnArchive;        
         //information
         public By titleTxt = By.Id("jform_title");
         public By textFram = By.Id("jform_articletext_ifr");

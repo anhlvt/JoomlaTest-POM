@@ -10,9 +10,9 @@ using OpenQA.Selenium.Support.PageObjects;
 
 namespace POMJoomlaTest.PageObjects
 {
-    class HomePage
+    public class HomePage
     {
-        private IWebDriver driver;
+        public IWebDriver driver;
         public HomePage(IWebDriver driver)
         {
             this.driver = driver;            

@@ -61,8 +61,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PageObjects\ArticlePage.cs" />
+    <Compile Include="PageObjects\CommonPage.cs" />
     <Compile Include="PageObjects\HomePage.cs" />
-    <Compile Include="TestCase.cs" />
+    <Compile Include="TestBase.cs" />
+    <Compile Include="TestObjects\TestCase.cs" />
     <Compile Include="PageObjects\LoginPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
