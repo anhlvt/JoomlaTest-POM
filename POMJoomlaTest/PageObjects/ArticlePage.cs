@@ -48,9 +48,7 @@ namespace POMJoomlaTest.PageObjects
         public IWebElement frameTextArea;
         [FindsBy(How = How.Id, Using = "tinymce")]
         public IWebElement txtTextArea;
-
-        [FindsBy(How = How.XPath, Using = "//div[@class='alert alert-success']/div[@class='alert-message']")]
-        public IWebElement successMessage;        
+               
         [FindsBy(How = How.CssSelector, Using = ".btn.js-stools-btn-filter")]
         public IWebElement btnSearchTool;
         [FindsBy(How = How.CssSelector, Using = ".btn.js-stools-btn-clear")]

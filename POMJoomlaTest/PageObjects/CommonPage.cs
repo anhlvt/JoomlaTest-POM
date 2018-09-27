@@ -9,7 +9,7 @@ namespace POMJoomlaTest.PageObjects
 {
    public class CommonPage
     {
-        private IWebDriver driver;
+        public IWebDriver driver;
         public string title;
         public CommonPage(IWebDriver driver)
         {
@@ -19,6 +19,8 @@ namespace POMJoomlaTest.PageObjects
 
         [FindsBy(How = How.CssSelector, Using = ".btn.hasTooltip")]
         public IWebElement btnSearch;
+        [FindsBy(How = How.XPath, Using = "//div[@class='alert alert-success']/div[@class='alert-message']")]
+        public IWebElement successMessage;
 
         public void switchToFrame(IWebElement frame)
         {
