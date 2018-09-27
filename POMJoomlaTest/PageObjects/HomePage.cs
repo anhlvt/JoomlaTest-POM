@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using NUnit.Framework;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 
 namespace POMJoomlaTest.PageObjects
@@ -22,12 +15,18 @@ namespace POMJoomlaTest.PageObjects
         [FindsBy(How = How.LinkText, Using = "Content")]
         public IWebElement barContent;
         [FindsBy(How = How.LinkText, Using = "Articles")]
-        public IWebElement barArticles;                
+        public IWebElement barArticles;
+        [FindsBy(How = How.LinkText, Using = "Media")]
+        public IWebElement linkMedia;
 
         public void goToArticlePage()
         {
             clickControl(barContent);
             clickControl(barArticles);
+        }
+        public void goToMediaPage()
+        {
+            clickControl(linkMedia);
         }
 
     }

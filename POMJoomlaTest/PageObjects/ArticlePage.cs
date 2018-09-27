@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using NUnit.Framework;
 using OpenQA.Selenium.Support.PageObjects;
-using OpenQA.Selenium.Support.UI;
+using NUnit.Framework;
 
 namespace POMJoomlaTest.PageObjects
 {
@@ -59,7 +53,11 @@ namespace POMJoomlaTest.PageObjects
         public IWebElement successMessage;        
         [FindsBy(How = How.CssSelector, Using = ".btn.js-stools-btn-filter")]
         public IWebElement btnSearchTool;
-
+        [FindsBy(How = How.CssSelector, Using = ".btn.js-stools-btn-clear")]
+        public IWebElement btnClear;
+        [FindsBy(How = How.Id, Using = "filter_search")]
+        public IWebElement txtFilterSearch;
+        
 
         //filter
         [FindsBy(How = How.Id, Using = "filter_published")]
@@ -67,64 +65,59 @@ namespace POMJoomlaTest.PageObjects
         [FindsBy(How = How.Id, Using = "filter_access")]
         public IWebElement cboAccessFilter;
         [FindsBy(How = How.Id, Using = "filter_author_id")]
-        public IWebElement cboAthorFilter;              
+        public IWebElement cboAthorFilter;        
 
-        public void addNewArticle(string title, string statusItems, string categoryItems, string accessItems, string paragraph)
+        public void addNewArticle(string title,  string categoryItem, string statusItem = null, string accessItem = null, string description = null)
         {
             clickControl(btnNew);
-            fillArticleInformation(title, statusItems, categoryItems, accessItems, paragraph);
+            fillArticleInformation(title, categoryItem, statusItem,accessItem, description);
             clickControl(btnSaveAndClose);
         }
-        public void editArticle(string title, string statusItems, string categoryItems, string accessItems, string paragraph)
+        public void editArticle(string title, string categoryItem, string statusItem = null, string accessItem = null, string description = null)
         {            
             clickControl(btnEdit);
-            fillArticleInformation(title, statusItems, categoryItems, accessItems, paragraph);
+            fillArticleInformation(title, categoryItem, statusItem, accessItem, description);
             clickControl(btnSaveAndClose);
         }
-        public void fillArticleInformation(string title, string statusItems,string categoryItems, string accessItems,string paragraph)
+        public void fillArticleInformation(string title, string categoryItem,string statusItem = null, string accessItem = null,string description = null)
         {
-            if (title != null)
-            {
-                enterTextBox(txtTitle, title);
-            }
-            if (statusItems != null)
-            {
-                selectDropDown(cboStatus, statusItems);
-            }
-            if (categoryItems!= null)
-            {
-                selectDropDown(cboCategory, categoryItems);
-            }
-            if (accessItems != null)
-            {
-                selectDropDown(cboAccess, accessItems);
-            }
-            if (paragraph != null)
+            enterText(txtTitle, title);
+            selectDropDown(cboCategory, categoryItem);
+            selectDropDown(cboStatus, statusItem);  
+            selectDropDown(cboAccess, accessItem);                       
+            if (description!=null)
             {
                 switchToFrame(frameTextArea);
-                enterTextBox(txtTextArea, paragraph);
+                enterText(txtTextArea, description);
                 switchToDefault();
-            }            
-        }
-        public void checkOnRecentArticle(string title)
+            }                           
+        }        
+        
+        public void checkArticleDisplay(string title, string categoryItem, string status=null)
         {
-            driver.FindElement(By.XPath("//a[normalize-space()=\"" + title + "\"]/ancestor::tr//input[@type='checkbox']")).Click();
-        }       
-        public void checkArticleExist(string title,string categoryItem)
-        {
-            try
+            searchByTitle(txtFilterSearch,title);
+            int rowCount = driver.FindElements(By.XPath("//table[@id='articleList']//tbody/tr")).Count;            
+            for (int i = 1; i <= rowCount; i++)
             {
-                Assert.IsTrue(driver.FindElement(By.XPath("//a[normalize-space()=\"" + title + "\"]")).Displayed);
-                Assert.AreEqual(driver.FindElement(By.XPath("//a[normalize-space()=\"" + title + "\"]/parent::div//div[@class='small']")).Text, "Category: " + categoryItem);
-            //    Assert.IsTrue(driver.FindElement(By.XPath("//a[normalize-space()=\"" + title + "\"]/ancestor::tr//span[@class='icon-publish']")).Displayed);
-            //    Assert.IsTrue(driver.FindElement(By.XPath("//a[normalize-space()=\"" + title + "\"]/ancestor::tr//span[@class='icon-unpublish']")).Displayed);
-            //    Assert.IsTrue(driver.FindElement(By.XPath("//a[normalize-space()=\"" + title + "\"]/ancestor::tr//span[@class='icon-archive']")).Displayed);
-            //    Assert.IsTrue(driver.FindElement(By.XPath("//a[normalize-space()=\"" + title + "\"]/ancestor::tr//span[@class='icon-trash']")).Displayed);
+                Assert.IsTrue(driver.FindElement(By.XPath("//table[@id='articleList']//tbody/tr[" + i + "]/td[4]//a[normalize-space()=\"" + title + "\"]")).Displayed);
+                Assert.IsTrue(driver.FindElement(By.XPath("//table[@id='articleList']//tbody/tr[" + i + "]/td[4]//div[normalize-space()='Category: " + categoryItem + "']")).Displayed);
+                if (status != null)
+                {
+                    switch (status)
+                    {
+                        case "Published":
+                            Assert.IsTrue(driver.FindElement(By.XPath("//table[@id='articleList']//tbody/tr[" + i + "]/td[3]//span[@class='icon-publish']")).Displayed);
+                            break;
+                        case "Unpublished":
+                            Assert.IsTrue(driver.FindElement(By.XPath("//table[@id='articleList']//tbody/tr[" + i + "]/td[3]//span[@class='icon-unpublish']")).Displayed);
+                            break;
+                        case "Archived":
+                            Assert.IsTrue(driver.FindElement(By.XPath("//table[@id='articleList']//tbody/tr[" + i + "]/td[3]//span[@class='icon-archive']")).Displayed);
+                            break;
+                    }                                        
+                }                
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            clickControl(btnClear);
         }
     }
 }

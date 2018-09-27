@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using NUnit.Framework;
-using OpenQA.Selenium.Support.PageObjects;
-using OpenQA.Selenium.Support.UI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using POMJoomlaTest.PageObjects;
+using OpenQA.Selenium.Support.UI;
 
 namespace POMJoomlaTest
 {
@@ -18,15 +12,14 @@ namespace POMJoomlaTest
     {
         public IWebDriver driver;
         public LoginPage loginPage;
-        public HomePage homePage;
-        public ArticlePage articlePage;
+        public Random rdn;       
+
         [TestInitialize]
         public void Initialize()
         {
             driver = new ChromeDriver();
             loginPage = new LoginPage(driver);
-            homePage = new HomePage(driver);
-            articlePage = new ArticlePage(driver);
+            rdn = new Random();
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
             driver.Manage().Cookies.DeleteAllCookies();
             driver.Manage().Window.Maximize();
@@ -34,5 +27,24 @@ namespace POMJoomlaTest
             loginPage.login("lctp", "lctp");
         }
 
+        [TestCleanup]
+        public void CleanUp()
+        {
+            try
+            {
+                driver.Quit();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        public void WaitForPageLoad(IWebDriver driver, int timeoutSec = 15)
+        {
+            WebDriverWait wait = new WebDriverWait(driver, new TimeSpan(0, 0, timeoutSec));
+            wait.Until(d => ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").Equals("complete"));
+            wait.Until(d => (bool)(d as IJavaScriptExecutor).ExecuteScript("return jQuery.active == 0"));
+        }
     }
 }

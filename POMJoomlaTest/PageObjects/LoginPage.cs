@@ -33,8 +33,8 @@ namespace POMJoomlaTest.PageObjects
         }
         public void login(string username, string password)
         {
-            enterTextBox(txtUserName,username);
-            enterTextBox(txtPassword, password);
+            enterText(txtUserName,username);
+            enterText(txtPassword, password);
             clickControl(btnLogin);            
         }
     }
