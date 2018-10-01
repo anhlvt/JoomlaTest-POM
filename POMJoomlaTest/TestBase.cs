@@ -1,28 +1,36 @@
 ﻿using System;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium.IE;
+using OpenQA.Selenium.Firefox;
 using POMJoomlaTest.PageObjects;
 using OpenQA.Selenium.Support.UI;
+using OpenQA.Selenium.Remote;
+using OpenQA.Selenium.Chrome;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace POMJoomlaTest
 {
-    [TestClass]
+    [TestClass]    
     public class TestBase
     {
         public IWebDriver driver;
+        //public RemoteWebDriver driver;
         public LoginPage loginPage;
-        public Random rdn;       
+        public Random rdn;
+        
 
         [TestInitialize]
         public void Initialize()
         {
-            driver = new ChromeDriver();
+            //driver = new ChromeDriver();     
+            //ChromeOptions options = new ChromeOptions();
+            FirefoxOptions options = new FirefoxOptions();
+            options.AddArgument("--start-maximized");
+            driver = new RemoteWebDriver(new Uri("http://192.168.191.84:4444/wd/hub"), options);
+            driver.Manage().Cookies.DeleteAllCookies();
+            //driver.Manage().Window.Maximize();
             loginPage = new LoginPage(driver);
             rdn = new Random();
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-            driver.Manage().Cookies.DeleteAllCookies();
-            driver.Manage().Window.Maximize();
             loginPage.goToWebPage();
             loginPage.login("lctp", "lctp");
         }
@@ -36,7 +44,7 @@ namespace POMJoomlaTest
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                throw e;
             }
         }
 
@@ -46,5 +54,5 @@ namespace POMJoomlaTest
             wait.Until(d => ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").Equals("complete"));
             wait.Until(d => (bool)(d as IJavaScriptExecutor).ExecuteScript("return jQuery.active == 0"));
         }
-    }
+           }
 }

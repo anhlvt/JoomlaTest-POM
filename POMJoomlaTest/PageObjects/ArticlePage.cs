@@ -1,14 +1,14 @@
 ﻿using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace POMJoomlaTest.PageObjects
 {
     public class ArticlePage : CommonPage
     {
         private IWebDriver driver;
-        
+
         public ArticlePage(IWebDriver driver) : base(driver)
         {
             this.driver = driver;
@@ -28,7 +28,7 @@ namespace POMJoomlaTest.PageObjects
         public IWebElement btnArchive;
         //save type
         [FindsBy(How = How.CssSelector, Using = "#toolbar-apply > button")]
-        public IWebElement btnSave ;
+        public IWebElement btnSave;
         [FindsBy(How = How.CssSelector, Using = "#toolbar-save > button")]
         public IWebElement btnSaveAndClose;
         [FindsBy(How = How.CssSelector, Using = "#toolbar-save-new > button")]
@@ -48,53 +48,53 @@ namespace POMJoomlaTest.PageObjects
         public IWebElement frameTextArea;
         [FindsBy(How = How.Id, Using = "tinymce")]
         public IWebElement txtTextArea;
-               
+
         [FindsBy(How = How.CssSelector, Using = ".btn.js-stools-btn-filter")]
         public IWebElement btnSearchTool;
         [FindsBy(How = How.CssSelector, Using = ".btn.js-stools-btn-clear")]
         public IWebElement btnClear;
         [FindsBy(How = How.Id, Using = "filter_search")]
         public IWebElement txtFilterSearch;
-        
+
 
         //filter
         [FindsBy(How = How.Id, Using = "filter_published")]
-        public IWebElement cboStatusFilter;        
+        public IWebElement cboStatusFilter;
         [FindsBy(How = How.Id, Using = "filter_access")]
         public IWebElement cboAccessFilter;
         [FindsBy(How = How.Id, Using = "filter_author_id")]
-        public IWebElement cboAthorFilter;        
+        public IWebElement cboAthorFilter;
 
-        public void addNewArticle(string title,  string categoryItem, string statusItem = null, string accessItem = null, string description = null)
+        public void addNewArticle(string title, string categoryItem, string statusItem = null, string accessItem = null, string description = null)
         {
             clickControl(btnNew);
-            fillArticleInformation(title, categoryItem, statusItem,accessItem, description);
+            fillArticleInformation(title, categoryItem, statusItem, accessItem, description);
             clickControl(btnSaveAndClose);
         }
         public void editArticle(string title, string categoryItem, string statusItem = null, string accessItem = null, string description = null)
-        {            
+        {
             clickControl(btnEdit);
             fillArticleInformation(title, categoryItem, statusItem, accessItem, description);
             clickControl(btnSaveAndClose);
         }
-        public void fillArticleInformation(string title, string categoryItem,string statusItem = null, string accessItem = null,string description = null)
+        public void fillArticleInformation(string title, string categoryItem, string statusItem = null, string accessItem = null, string description = null)
         {
             enterText(txtTitle, title);
             selectDropDown(cboCategory, categoryItem);
-            selectDropDown(cboStatus, statusItem);  
-            selectDropDown(cboAccess, accessItem);                       
-            if (description!=null)
+            selectDropDown(cboStatus, statusItem);
+            selectDropDown(cboAccess, accessItem);
+            if (description != null)
             {
                 switchToFrame(frameTextArea);
                 enterText(txtTextArea, description);
                 switchToDefault();
-            }                           
-        }        
-        
-        public void checkArticleDisplay(string title, string categoryItem, string status=null)
+            }
+        }
+
+        public void checkArticleDisplay(string title, string categoryItem, string status = null)
         {
-            searchByTitle(txtFilterSearch,title);
-            int rowCount = driver.FindElements(By.XPath("//table[@id='articleList']//tbody/tr")).Count;            
+            searchByTitle(txtFilterSearch, title);
+            int rowCount = driver.FindElements(By.XPath("//table[@id='articleList']//tbody/tr")).Count;
             for (int i = 1; i <= rowCount; i++)
             {
                 Assert.IsTrue(driver.FindElement(By.XPath("//table[@id='articleList']//tbody/tr[" + i + "]/td[4]//a[normalize-space()=\"" + title + "\"]")).Displayed);
@@ -112,8 +112,8 @@ namespace POMJoomlaTest.PageObjects
                         case "Archived":
                             Assert.IsTrue(driver.FindElement(By.XPath("//table[@id='articleList']//tbody/tr[" + i + "]/td[3]//span[@class='icon-archive']")).Displayed);
                             break;
-                    }                                        
-                }                
+                    }
+                }
             }
             clickControl(btnClear);
         }

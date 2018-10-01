@@ -1,9 +1,9 @@
 ﻿using System;
 using OpenQA.Selenium;
-using NUnit.Framework;
 using OpenQA.Selenium.Support.PageObjects;
 using OpenQA.Selenium.Support.UI;
 using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace POMJoomlaTest.PageObjects
 {

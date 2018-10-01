@@ -2,6 +2,7 @@
 using POMJoomlaTest.PageObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+
 namespace POMJoomlaTest
 {
 
@@ -9,8 +10,9 @@ namespace POMJoomlaTest
     public class ArticleTestCase : TestBase
     {
         HomePage homePage;
-        ArticlePage articlePage;        
-        [TestMethod]
+        ArticlePage articlePage;
+                
+        [TestMethod]        
         [Owner("Tuan Anh")]
         [TestCategory("Article")]
         [Description("Verify user can create new article with valid information")]
