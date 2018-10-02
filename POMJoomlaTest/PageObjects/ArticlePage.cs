@@ -91,26 +91,28 @@ namespace POMJoomlaTest.PageObjects
             }
         }
 
-        public void checkArticleDisplay(string title, string categoryItem, string status = null)
+        public void checkArticleDisplay(string title, string categoryitem, string status = null)
         {
             searchByTitle(txtFilterSearch, title);
-            int rowCount = driver.FindElements(By.XPath("//table[@id='articleList']//tbody/tr")).Count;
-            for (int i = 1; i <= rowCount; i++)
+            int rowcounts = driver.FindElements(By.XPath("//table[@id='articlelist']//tbody/tr")).Count;
+            //int colcounts = driver.findelements(by.xpath("//table[@id='articlelist']//thead/tr/th")).count;
+            for (int i = 1; i <= rowcounts; i++)
             {
-                Assert.IsTrue(driver.FindElement(By.XPath("//table[@id='articleList']//tbody/tr[" + i + "]/td[4]//a[normalize-space()=\"" + title + "\"]")).Displayed);
-                Assert.IsTrue(driver.FindElement(By.XPath("//table[@id='articleList']//tbody/tr[" + i + "]/td[4]//div[normalize-space()='Category: " + categoryItem + "']")).Displayed);
+                Assert.IsTrue(driver.FindElement(By.XPath("//table[@id='articlelist']//tbody/tr[" + i + "]/td[4]//a[normalize-space()=\"" + title + "\"]")).Displayed);
+                Assert.IsTrue(driver.FindElement(By.XPath("//table[@id='articlelist']//tbody/tr[" + i + "]/td[4]//div[normalize-space()='category: " + categoryitem + "']")).Displayed);
+
                 if (status != null)
                 {
                     switch (status)
                     {
-                        case "Published":
-                            Assert.IsTrue(driver.FindElement(By.XPath("//table[@id='articleList']//tbody/tr[" + i + "]/td[3]//span[@class='icon-publish']")).Displayed);
+                        case "published":
+                            Assert.IsTrue(driver.FindElement(By.XPath("//table[@id='articlelist']//tbody/tr[" + i + "]/td[3]//span[@class='icon-publish']")).Displayed);
                             break;
-                        case "Unpublished":
-                            Assert.IsTrue(driver.FindElement(By.XPath("//table[@id='articleList']//tbody/tr[" + i + "]/td[3]//span[@class='icon-unpublish']")).Displayed);
+                        case "unpublished":
+                            Assert.IsTrue(driver.FindElement(By.XPath("//table[@id='articlelist']//tbody/tr[" + i + "]/td[3]//span[@class='icon-unpublish']")).Displayed);
                             break;
-                        case "Archived":
-                            Assert.IsTrue(driver.FindElement(By.XPath("//table[@id='articleList']//tbody/tr[" + i + "]/td[3]//span[@class='icon-archive']")).Displayed);
+                        case "archived":
+                            Assert.IsTrue(driver.FindElement(By.XPath("//table[@id='articlelist']//tbody/tr[" + i + "]/td[3]//span[@class='icon-archive']")).Displayed);
                             break;
                     }
                 }
@@ -119,3 +121,4 @@ namespace POMJoomlaTest.PageObjects
         }
     }
 }
+

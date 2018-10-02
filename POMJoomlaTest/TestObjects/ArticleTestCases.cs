@@ -26,7 +26,7 @@ namespace POMJoomlaTest
             string message = "Article saved.";
 
             homePage.goToArticlePage();
-            articlePage.addNewArticle(title, categoryItem, description: description);
+            articlePage.addNewArticle(title, categoryItem, description:description);
             articlePage.verifyControlMessage(articlePage.successMessage, message);
             articlePage.checkArticleDisplay(title, categoryItem);
         }
@@ -132,6 +132,7 @@ namespace POMJoomlaTest
             articlePage.clickControl(articlePage.btnSearchTool);
             articlePage.selectDropDown(articlePage.cboStatusFilter, statusFilterItem);
             articlePage.checkArticleDisplay(title, categoryItem, statusItemModify);
-        }
+        }           
     }
 }
+

@@ -17,18 +17,20 @@ namespace POMJoomlaTest
         //public RemoteWebDriver driver;
         public LoginPage loginPage;
         public Random rdn;
-        
+        string IPAddress = "192.168.191.84";
+
+
 
         [TestInitialize]
         public void Initialize()
         {
             //driver = new ChromeDriver();     
-            //ChromeOptions options = new ChromeOptions();
-            FirefoxOptions options = new FirefoxOptions();
+            ChromeOptions options = new ChromeOptions();
+            //FirefoxOptions options = new FirefoxOptions();
             options.AddArgument("--start-maximized");
-            driver = new RemoteWebDriver(new Uri("http://192.168.191.84:4444/wd/hub"), options);
+            driver = new RemoteWebDriver(new Uri("http://"+IPAddress+":4444/wd/hub"), options);
             driver.Manage().Cookies.DeleteAllCookies();
-            //driver.Manage().Window.Maximize();
+            driver.Manage().Window.Maximize();
             loginPage = new LoginPage(driver);
             rdn = new Random();
             loginPage.goToWebPage();
@@ -44,10 +46,9 @@ namespace POMJoomlaTest
             }
             catch (Exception e)
             {
-                throw e;
+                Console.WriteLine(e);
             }
         }
-
         public void WaitForPageLoad(IWebDriver driver, int timeoutSec = 15)
         {
             WebDriverWait wait = new WebDriverWait(driver, new TimeSpan(0, 0, timeoutSec));
