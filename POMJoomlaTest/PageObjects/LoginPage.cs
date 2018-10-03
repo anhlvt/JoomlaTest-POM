@@ -1,7 +1,5 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.PageObjects;
-using OpenQA.Selenium.Support.UI;
 
 namespace POMJoomlaTest.PageObjects
 {
@@ -23,13 +21,15 @@ namespace POMJoomlaTest.PageObjects
 
         public void goToWebPage()
         {
+            //driver.Url = ConfigurationManager.AppSettings["URL"];
             driver.Navigate().GoToUrl("http://192.168.190.247/joomlatest/administrator/index.php");
         }
         public void login(string username, string password)
         {
-            enterText(txtUserName,username);
+            enterText(txtUserName, username);
             enterText(txtPassword, password);
-            clickControl(btnLogin);            
+            clickControl(btnLogin);
         }
+
     }
 }

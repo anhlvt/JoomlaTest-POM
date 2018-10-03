@@ -24,17 +24,17 @@ namespace POMJoomlaTest
         [TestInitialize]
         public void Initialize()
         {
-            //driver = new ChromeDriver();     
-            ChromeOptions options = new ChromeOptions();
+            driver = new ChromeDriver();     
+            //ChromeOptions options = new ChromeOptions();
             //FirefoxOptions options = new FirefoxOptions();
-            options.AddArgument("--start-maximized");
-            driver = new RemoteWebDriver(new Uri("http://"+IPAddress+":4444/wd/hub"), options);
+            //options.AddArgument("--start-maximized");
+            //driver = new RemoteWebDriver(new Uri("http://"+IPAddress+":4444/wd/hub"), options);
             driver.Manage().Cookies.DeleteAllCookies();
             driver.Manage().Window.Maximize();
             loginPage = new LoginPage(driver);
             rdn = new Random();
             loginPage.goToWebPage();
-            loginPage.login("lctp", "lctp");
+            loginPage.login("lctp","lctp");
         }
 
         [TestCleanup]
@@ -55,5 +55,5 @@ namespace POMJoomlaTest
             wait.Until(d => ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").Equals("complete"));
             wait.Until(d => (bool)(d as IJavaScriptExecutor).ExecuteScript("return jQuery.active == 0"));
         }
-           }
+    }
 }

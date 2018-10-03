@@ -1,6 +1,8 @@
-﻿using System;
-using POMJoomlaTest.PageObjects;
+﻿using POMJoomlaTest.PageObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Excel = Microsoft.Office.Interop.Excel;
+
+
 
 
 namespace POMJoomlaTest
@@ -9,29 +11,31 @@ namespace POMJoomlaTest
     [TestClass]
     public class ArticleTestCase : TestBase
     {
+        public TestContext TestContext { get; set; }
         HomePage homePage;
         ArticlePage articlePage;
-                
-        [TestMethod]        
+        
+        [TestMethod]
+        [DataSource("System.Data.OleDb", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+ CommonValue.path +";Persist Security Info = False;Extended Properties = 'Excel 12.0 xml;HDR=Yes;'", "TestCase1$", DataAccessMethod.Sequential)]
         [Owner("Tuan Anh")]
-        [TestCategory("Article")]
+        [TestCategory("Article")]        
         [Description("Verify user can create new article with valid information")]
         public void TC_JOOMLA_ARTICLE_001()
         {
             homePage = new HomePage(driver);
             articlePage = new ArticlePage(driver);            
-            string title = "Article Test " + rdn.Next(10000);
-            string categoryItem = "Sample Data-Articles";
-            string description = "this is article content";
             string message = "Article saved.";
-
+            string title = TestContext.DataRow["Title"].ToString();
+            string categoryItem = TestContext.DataRow["Category"].ToString();
+            string description = TestContext.DataRow["Description"].ToString();
             homePage.goToArticlePage();
-            articlePage.addNewArticle(title, categoryItem, description:description);
+            articlePage.addNewArticle(title, categoryItem, description: description);
             articlePage.verifyControlMessage(articlePage.successMessage, message);
             articlePage.checkArticleDisplay(title, categoryItem);
         }
 
         [TestMethod]
+        [DataSource("System.Data.OleDb", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + CommonValue.path + ";Persist Security Info = False;Extended Properties = 'Excel 12.0 xml;HDR=Yes;'", "TestCase2$", DataAccessMethod.Sequential)]
         [Owner("Tuan Anh")]
         [TestCategory("Article")]
         [Description("Verify user can edit an article")]
@@ -39,11 +43,11 @@ namespace POMJoomlaTest
         {
             homePage = new HomePage(driver);
             articlePage = new ArticlePage(driver);
-            string title = "Article Test " + rdn.Next(10000);
-            string titleEdit = title + "_update";
-            string categoryItem = "Sample Data-Articles";
-            string categoryItemEdit = "- Park Site";
-            string description = "this is article content";
+            string title = TestContext.DataRow["Title"].ToString();
+            string titleEdit = TestContext.DataRow["TitleEdit"].ToString();
+            string categoryItem = TestContext.DataRow["Category"].ToString();
+            string categoryItemEdit = TestContext.DataRow["CategoryEdit"].ToString();
+            string description = TestContext.DataRow["Description"].ToString();
             string message = "Article saved.";
 
             homePage.goToArticlePage();
@@ -74,7 +78,7 @@ namespace POMJoomlaTest
             homePage.goToArticlePage();
             articlePage.addNewArticle(title, categoryItem, statusItem: statusItem, description: description);
             //articlePage.verifyControlMessage(articlePage.successMessage, "Article saved.");
-            articlePage.checkArticleDisplay(title, categoryItem,statusItem);
+            articlePage.checkArticleDisplay(title, categoryItem, statusItem);
             articlePage.selectByTitle(title);
             articlePage.clickControl(articlePage.btnPublish);
             articlePage.verifyControlMessage(articlePage.successMessage, message);
@@ -132,7 +136,7 @@ namespace POMJoomlaTest
             articlePage.clickControl(articlePage.btnSearchTool);
             articlePage.selectDropDown(articlePage.cboStatusFilter, statusFilterItem);
             articlePage.checkArticleDisplay(title, categoryItem, statusItemModify);
-        }           
+        }
     }
 }
 
