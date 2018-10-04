@@ -56,7 +56,6 @@ namespace POMJoomlaTest.PageObjects
         [FindsBy(How = How.Id, Using = "filter_search")]
         public IWebElement txtFilterSearch;
 
-
         //filter
         [FindsBy(How = How.Id, Using = "filter_published")]
         public IWebElement cboStatusFilter;

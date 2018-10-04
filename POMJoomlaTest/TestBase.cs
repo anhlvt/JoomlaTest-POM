@@ -17,7 +17,7 @@ namespace POMJoomlaTest
         //public RemoteWebDriver driver;
         public LoginPage loginPage;
         public Random rdn;
-        string IPAddress = "192.168.191.84";
+        //string IPAddress = "192.168.191.84";
 
 
 

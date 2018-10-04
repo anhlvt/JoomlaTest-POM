@@ -1,11 +1,8 @@
 ﻿using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
-using OpenQA.Selenium.Support.UI;
-using OpenQA.Selenium.Remote;
-using System.IO;
-using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading;
 
 namespace POMJoomlaTest.PageObjects
 {
@@ -25,13 +22,12 @@ namespace POMJoomlaTest.PageObjects
         public MediaPage(IWebDriver driver) : base(driver)
         {
         }
-
-
         public void chooseFileUpload(string path)
-        {
-            clickControl(btnUpload);
+        {            
+            clickControl(btnUpload);            
             btnChooseFile.SendKeys(path);
-            Thread.Sleep(1000);
+            //driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            Thread.Sleep(500);
             clickControl(btnStartUpload);
         }
         public void deleteImage(string imageTitle)
@@ -40,7 +36,6 @@ namespace POMJoomlaTest.PageObjects
             driver.FindElement(By.XPath("//div[@class='imgDelete']/a[@rel='" + imageTitle + "']")).Click();
             switchToDefault();
         }
-
         public void checkImageDisplay(string imageTitle)
         {
             try
